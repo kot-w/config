@@ -33,6 +33,12 @@ func NewRedisAsyncer(options *redis.Options, subChannel string) *RedisAsyncer {
 	return a
 }
 
+func (a *RedisAsyncer) ContentType(key string) ContentType {
+	// TODO: support yaml
+
+	return T_JSON
+}
+
 func (a *RedisAsyncer) subscribe(channel string) {
 	sub := a.db.Subscribe(a.ctx, channel)
 	_, err := sub.Receive(a.ctx)
@@ -84,21 +90,21 @@ func (a *RedisAsyncer) notify(key string) {
 	if a.notifyEnabled {
 		if ch, ok := a.notifyChans.Load(key); ok {
 			logger.Debugf("%s changed notify", key)
-			ch.(chan bool) <- true
+			ch.(chan struct{}) <- struct{}{}
 		}
 	}
 }
 
-func (a *RedisAsyncer) Watch(key string) chan bool {
+func (a *RedisAsyncer) Watch(key string) chan struct{} {
 	if !a.notifyEnabled {
 		return nil
 	}
 
 	if ch, ok := a.notifyChans.Load(key); ok {
-		return ch.(chan bool)
+		return ch.(chan struct{})
 	}
 
-	ch := make(chan bool, 1)
+	ch := make(chan struct{}, 1)
 	a.notifyChans.Store(key, ch)
 
 	return ch

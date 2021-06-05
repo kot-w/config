@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/kot-w/goutils/object"
+	"github.com/stretchr/testify/assert"
 )
 
 func testTrimJsonComment(t *testing.T) {
@@ -28,7 +28,7 @@ func testTrimJsonComment(t *testing.T) {
 }
 }`)
 
-	jsonStr = trimJsonComment(jsonStr)
+	jsonStr = trimJsonComment(jsonStr, T_JSON)
 
 	var v1, v2 interface{}
 

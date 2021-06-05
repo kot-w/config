@@ -3,8 +3,8 @@ package config
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/kot-w/goutils/object"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestJSONToMap(t *testing.T) {
